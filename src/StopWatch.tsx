@@ -1,61 +1,180 @@
-import React, {useState, useCallback, useEffect} from 'react'
-import StopWatchButton from './StopWatchButton'
-import { formatTime } from './FormatTime'
-import './StopWatch.css'
-
-var prevTime: number = 0
+import React, { useState, useCallback, useEffect } from "react";
+import StopWatchButton from "./StopWatchButton";
+import "./StopWatch.css";
 
 export default function StopWatch() {
-    const [time, setTime] = useState(0)
-    const [isRunning, setIsRunning] = useState(false)
-    const [laps, setLaps] = useState<number[]>([])
+  const startTime: number = 1;
+  const endTime: number = 1;
 
-    const handleReset = useCallback(() => {
-        setIsRunning(false)
-        setTime(0)
-        setLaps([])
-        prevTime = 0
-    }, [])
+  const [redTime, setRedTime] = useState(startTime);
+  const [redIsRunning, setRedIsRunning] = useState(false);
+  const [blueTime, setBlueTime] = useState(startTime);
+  const [blueIsRunning, setBlueIsRunning] = useState(false);
+  const [neutralTime, setNeutralTime] = useState(startTime);
+  const [neutralIsRunning, setNeutralIsRunning] = useState(false);
+  const [endGameTime, setEndGameTime] = useState(endTime);
+  const [endGameRunning, setEndGameRunning] = useState(false);
+  let redElapsed = startTime,
+    blueElapsed = startTime,
+    neutralElapsed = startTime;
 
-    useEffect( () => {
-        let intervalId: NodeJS.Timeout
-        if (isRunning) {
-            intervalId = setInterval(() => {
-                setTime((prevTime) => prevTime+1)
-            }, 10)
-        }
-        return () => clearInterval(intervalId)
-    } , [isRunning]
-    )
+  const handleReset = useCallback(() => {
+    stopAll();
+    setEndGameTime(endTime);
+    setRedTime(startTime);
+    setBlueTime(startTime);
+    setNeutralTime(startTime);
+  }, []);
 
-    const addLap = (time: number) => {
-        const toAdd: number = time - prevTime
-        setLaps([...laps, toAdd])
-        prevTime = time
+  const stopAll = () => {
+    setRedIsRunning(false);
+    setBlueIsRunning(false);
+    setNeutralIsRunning(false);
+    setEndGameRunning(false);
+  }
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (redIsRunning) {
+      interval = setInterval(() => {
+        redElapsed = redElapsed - 1;
+        setRedTime(redElapsed);
+      }, 1000);
     }
+    return () => clearInterval(interval);
+  }, [redIsRunning]);
 
-        return(
-            <div className = "clock-container">
-                <h1>Stopwatch</h1>
-                <div className = "clock-display">
-                    <p>{formatTime(time)}</p>
-                </div>
-                <div className = "button-row">
-                    <StopWatchButton type = "start" onClick={() => setIsRunning(true)} disabled = {isRunning}/>
-                    <StopWatchButton type = "stop" onClick={() => setIsRunning(false)} disabled = {!isRunning} />
-                    <StopWatchButton type = "lap" onClick={() => addLap(time)} disabled = {!isRunning} />
-                    <StopWatchButton type = "reset" onClick={handleReset} />
-                </div>
-                {
-                    laps.length > 0 && (
-                        <div className='lap-times'>
-                            <h2>Lap Times</h2>
-                            <ul>
-                                {laps.map((lap, index) => (<li key={index}>Lap {index+1}: {formatTime(lap)}</li>))}
-                            </ul>
-                            </div>
-                    )
-                }
-            </div>
-        )
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (blueIsRunning) {
+      interval = setInterval(() => {
+        blueElapsed = blueElapsed - 1;
+        setBlueTime(blueElapsed);
+      }, 1000);
     }
+    return () => clearInterval(interval);
+  }, [blueIsRunning]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (neutralIsRunning) {
+      interval = setInterval(() => {
+        neutralElapsed = neutralElapsed - 1;
+        setNeutralTime(neutralElapsed);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [neutralIsRunning]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (endGameRunning) {
+      interval = setInterval(() => {
+        setEndGameTime((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [endGameRunning]);
+
+  useEffect(() => {
+    if (redTime <= 0 || blueTime <= 0 || neutralTime <= 0) {
+      setEndGameRunning(true);
+      setRedIsRunning(false);
+      setBlueIsRunning(false);
+      setNeutralIsRunning(false);
+    }
+  }, [redTime, blueTime, neutralTime]);
+
+  useEffect(() => {
+    if (endGameTime <= 0) {
+      setEndGameRunning(false);
+    }
+  }, [endGameTime]);
+
+  const swapRed = () => {
+    setBlueIsRunning(false);
+    setNeutralIsRunning(false);
+    setRedIsRunning(true);
+  };
+
+  const swapBlue = () => {
+    setRedIsRunning(false);
+    setNeutralIsRunning(false);
+    setBlueIsRunning(true);
+  };
+
+  function swapNeutral() {
+    setRedIsRunning(false);
+    setBlueIsRunning(false);
+    setNeutralIsRunning(true);
+  }
+
+  return (
+    <div className="parent">
+      <div className="div1">
+        <h1>Noam's VEX Competition</h1>
+      </div>
+      <div className="div2">
+        <h2>{redTime}</h2>
+        <StopWatchButton name="Red" onClick={swapRed} disabled={redIsRunning || endGameRunning} />
+      </div>
+
+      <div className={"div3"}>
+        {" "}
+        <h2>{neutralTime}</h2>
+        <StopWatchButton
+          name="Neutral"
+          onClick={swapNeutral}
+          disabled={neutralIsRunning || endGameRunning}
+        />
+      </div>
+      <div className="div4">
+        {" "}
+        <h2>{blueTime}</h2>
+        <StopWatchButton
+          name="Blue"
+          onClick={swapBlue}
+          disabled={blueIsRunning || endGameRunning}
+        />
+      </div>
+      <div
+        style={{
+          backgroundColor:
+            endGameTime === 0
+              ? "#ff1900"
+              : endGameRunning
+              ? "#f6e515"
+              : "#31a222",
+        }}
+        className="div5"
+      >
+        <div
+          style={{
+            textAlign: "center",
+            justifyContent: "center",
+            display: "flex",
+          }}
+        >
+          <h2
+            style={{
+              color: "black",
+              paddingTop: "2px",
+              paddingBottom: "2px",
+              paddingLeft: "20px",
+              paddingRight: "20px",
+              borderRadius: "9999px",
+              backgroundColor: "rgb(255, 255, 255, 0.7)",
+              margin: "0px",
+              marginBottom: "10px",
+              fontSize: "2rem"
+            }}
+          >
+            {endGameTime}
+          </h2>
+        </div>
+        <StopWatchButton name="Stop" onClick={stopAll} />
+        <StopWatchButton name="Reset" onClick={handleReset} />
+      </div>
+    </div>
+  );
+}
