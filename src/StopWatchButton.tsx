@@ -13,7 +13,7 @@ export default function StopWatchButton({
 }: buttonProps) {
  
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <button className="controls" onClick={onClick} disabled={disabled}>
       {name}
     </button>
   );
