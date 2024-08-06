@@ -105,15 +105,31 @@ export default function StopWatch() {
 
   return (
     <div className="parent">
-      {/* <div className="div1">
-        <h1 style={{verticalAlign: "middle"}}>Noam's </h1>
+      <div className="div1">
+        <h1
+          className="title"
+          style={{ display: "inline-block", verticalAlign: "middle" }}
+        >
+          Noam's
+        </h1>
         <img
           src="https://robotics.nasa.gov/wp-content/uploads/2020/04/vex_robotics_logo.png"
-          width={"100px"}
-          height={"50px"}
-        ></img>
-        <h1> Competition</h1>
-      </div> */}
+          width="166px"
+          height="80px"
+          style={{
+            verticalAlign: "middle",
+            paddingLeft: "30px",
+            paddingRight: "20px",
+          }}
+        />
+        <h1
+          className="title"
+          style={{ display: "inline-block", verticalAlign: "middle" }}
+        >
+          Competition
+        </h1>
+      </div>
+
       <div className="div2">
         <h2>{redTime}</h2>
         <StopWatchButton
