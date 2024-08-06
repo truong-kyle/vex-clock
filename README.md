@@ -2,6 +2,7 @@
 Built for k2i's 2024 VEX Competition
 ## Usage:
 1. Download and open this directory in a terminal.
+1. Install all necessary dependencies using `npm i`
 1. Run `npm start`
 ## Gameplay:
 There are 5 buttons
