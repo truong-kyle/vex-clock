@@ -110,23 +110,7 @@ export default function StopWatch() {
           className="title"
           style={{ display: "inline-block", verticalAlign: "middle" }}
         >
-          Noam's
-        </h1>
-        <img
-          src="https://robotics.nasa.gov/wp-content/uploads/2020/04/vex_robotics_logo.png"
-          width="166px"
-          height="80px"
-          style={{
-            verticalAlign: "middle",
-            paddingLeft: "30px",
-            paddingRight: "20px",
-          }}
-        />
-        <h1
-          className="title"
-          style={{ display: "inline-block", verticalAlign: "middle" }}
-        >
-          Competition
+          VEX : EQUILIBRIUM
         </h1>
       </div>
 
