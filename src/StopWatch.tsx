@@ -3,12 +3,15 @@ import StopWatchButton from "./StopWatchButton";
 import "./StopWatch.css";
 
 export default function StopWatch() {
+  const redStartTime = 120;
+  const blueStartTime = 120;
+
   const startTime = 120;
   const endTime = 20;
 
-  const [redTime, setRedTime] = useState(startTime);
+  const [redTime, setRedTime] = useState(redStartTime);
   const [redIsRunning, setRedIsRunning] = useState(false);
-  const [blueTime, setBlueTime] = useState(startTime);
+  const [blueTime, setBlueTime] = useState(blueStartTime);
   const [blueIsRunning, setBlueIsRunning] = useState(false);
   const [neutralTime, setNeutralTime] = useState(startTime);
   const [neutralIsRunning, setNeutralIsRunning] = useState(false);
@@ -18,8 +21,8 @@ export default function StopWatch() {
   const handleReset = useCallback(() => {
     stopAll();
     setEndGameTime(endTime);
-    setRedTime(startTime);
-    setBlueTime(startTime);
+    setRedTime(redStartTime);
+    setBlueTime(blueStartTime);
     setNeutralTime(startTime);
   }, []);
 
